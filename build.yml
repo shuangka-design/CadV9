@@ -26,7 +26,7 @@ jobs:
                    app/src/main/AndroidManifest.xml \
                    app/src/main/java/com/example/cadmobile/MainActivity.kt \
                    app/src/main/java/com/example/cadmobile/WasmAssetsHandler.kt \
-                   web-extras/android-bridge.js web-extras/pen-support.js; do
+                   web-extras/android-bridge.js; do
             if [ -f "$f" ]; then echo "OK      $f"; else echo "MISSING $f"; MISSING=1; fi
           done
           if [ -n "$MISSING" ]; then echo "::error::มีไฟล์หายหรือวางผิดตำแหน่ง (ดูรายการ MISSING ด้านบน)"; exit 1; fi
@@ -61,9 +61,8 @@ jobs:
           mkdir -p "$DEST"
           cp -r "$(dirname "$IDX")"/. "$DEST"/
           cp web-extras/android-bridge.js "$DEST"/
-          cp web-extras/pen-support.js "$DEST"/
-          sed -i '0,/<head[^>]*>/s//&\n<script src="android-bridge.js"><\/script>\n<script src="pen-support.js"><\/script>/' "$DEST/index.html"
-          grep -n -E "android-bridge.js|pen-support.js" "$DEST/index.html"
+          sed -i '0,/<head[^>]*>/s//&\n<script src="android-bridge.js"><\/script>/' "$DEST/index.html"
+          grep -n "android-bridge.js" "$DEST/index.html"
 
       - name: Decode signing key (optional)
         if: env.KS_B64 != ''
